@@ -44,6 +44,56 @@ Alternating Least Squares (ALS) is an iterative optimization algorithm frequentl
 
 Explore the synergy between Matrix Factorization and ALS, unlocking the potential to enhance recommendation system performance and deliver more accurate and personalized suggestions to users.
 
+## AWS Data Pipeline on Transient EMR Cluster
+# Movie Recommendation Airflow Workflow
+
+## Overview
+
+This Airflow workflow automates the process of setting up and running an Amazon EMR cluster for movie recommendation. It includes the following steps:
+
+1. **Create EMR Cluster:** Initiates the creation of an EMR cluster with specified configurations and applications, such as Spark and Hive.
+
+2. **Ingest Layer:** Submits a Spark job to ingest movie data into the EMR cluster, leveraging the script located at `s3://airflowemr/scripts/ingest.py`.
+
+3. **Poll Ingest Layer:** Monitors the status of the ingest layer Spark job and waits for completion before proceeding.
+
+4. **Transform Layer:** Submits a Spark job for transforming movie data, utilizing the script at `s3://airflowemr/scripts/Movie_Recommendation.py`.
+
+5. **Poll Transform Layer:** Monitors the status of the transform layer Spark job and waits for completion before terminating the EMR cluster.
+
+6. **Terminate EMR Cluster:** Terminates the running EMR cluster to ensure cost efficiency.
+
+## Prerequisites
+
+- AWS credentials with the necessary permissions to create and manage EMR clusters.
+- Configured EMR cluster settings, including key pair, subnet, and S3 bucket paths for logs and scripts.
+- SNS (Simple Notification Service) setup for email notifications.
+
+## Configuration
+
+- Update the `create_emr_cluster` function in the DAG file with your specific EMR cluster configurations.
+- Adjust the paths and filenames in the `add_step_emr` calls to point to your specific Spark scripts.
+
+## Usage
+
+1. Ensure that your Airflow environment is properly set up and the necessary plugins are installed.
+
+2. Copy the provided DAG file (`movie_recommendation_airflow_dag.py`) to your Airflow DAGs directory.
+
+3. Trigger the DAG manually or set up a schedule based on your requirements.
+
+4. Monitor the Airflow UI or logs for the progress of each step.
+
+5. Receive email notifications, if configured, through SNS for successful or failed executions.
+
+## Note
+
+This workflow includes the termination of the EMR cluster after processing to manage costs effectively. Make sure that all necessary data is persisted in your S3 bucket before cluster termination.
+
+For questions or issues, contact the workflow owner (specified in the DAG configuration).
+
+
+
 
 
 
